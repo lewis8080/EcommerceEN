@@ -3,9 +3,9 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { useCart } from '../context/CartContext'
 
 const anchors = [
-  { label: 'The Serum', hash: '#serum' },
-  { label: 'Ingredients', hash: '#ingredients' },
-  { label: 'Ritual', hash: '#ritual' },
+  { label: '精华液', hash: '#serum' },
+  { label: '成分', hash: '#ingredients' },
+  { label: '仪式', hash: '#ritual' },
 ]
 
 export default function Nav() {
@@ -56,14 +56,14 @@ export default function Nav() {
             to="/maison"
             className="group relative text-[11px] font-light uppercase tracking-[0.3em] text-umber/70 transition-colors hover:text-umber"
           >
-            Maison
+品牌故事
             <span className="absolute -bottom-1 left-0 h-px w-0 bg-bronze transition-all duration-500 group-hover:w-full" />
           </Link>
           <Link
             to="/shop"
             className="group relative text-[11px] font-light uppercase tracking-[0.3em] text-umber/70 transition-colors hover:text-umber"
           >
-            Shop
+购物
             <span className="absolute -bottom-1 left-0 h-px w-0 bg-bronze transition-all duration-500 group-hover:w-full" />
           </Link>
         </nav>
@@ -73,7 +73,7 @@ export default function Nav() {
             onClick={openCart}
             className="relative border border-umber/30 px-5 py-2 text-[11px] uppercase tracking-[0.3em] transition-all duration-500 hover:bg-umber hover:text-ivory"
           >
-            Bag
+            购物袋
             {count > 0 && (
               <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-bronze text-[10px] tracking-normal text-ivory">
                 {count}

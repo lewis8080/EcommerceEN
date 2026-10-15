@@ -38,12 +38,12 @@ export default function CartDrawer() {
       >
         <div className="flex items-center justify-between border-b border-umber/10 px-8 py-6">
           <p className="text-[11px] uppercase tracking-[0.35em] text-umber/70">
-            Your bag {count > 0 && `· ${count}`}
+            你的购物袋 {count > 0 && `· ${count}`}
           </p>
           <button
             onClick={closeCart}
             className="font-serif text-2xl leading-none text-umber/60 transition-colors hover:text-umber"
-            aria-label="Close bag"
+            aria-label="关闭购物袋"
           >
             ×
           </button>
@@ -53,11 +53,11 @@ export default function CartDrawer() {
           {lines.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
               <p className="font-serif text-2xl italic text-umber/60">
-                Your bag is empty.
+                你的购物袋是空的。
               </p>
               <p className="mt-3 max-w-[16rem] text-xs font-light leading-relaxed text-smoke">
-                Begin with the serum — or let the Discovery Ritual introduce
-                you.
+                从精华液开始——或让探索仪式套装
+                带你认识。
               </p>
             </div>
           ) : (
@@ -110,7 +110,7 @@ export default function CartDrawer() {
                           onClick={() => remove(l.slug)}
                           className="text-[10px] uppercase tracking-[0.25em] text-smoke underline-offset-4 transition-colors hover:text-umber hover:underline"
                         >
-                          Remove
+                          移除
                         </button>
                       </div>
                     </div>
@@ -125,23 +125,23 @@ export default function CartDrawer() {
           <div className="border-t border-umber/10 px-8 py-6">
             <div className="mb-1 flex items-center justify-between">
               <p className="text-[11px] uppercase tracking-[0.3em] text-umber/70">
-                Subtotal
+                小计
               </p>
               <p className="font-serif text-2xl">{formatPrice(subtotal)}</p>
             </div>
             <p className="mb-5 text-[10px] font-light tracking-wide text-smoke">
-              Complimentary shipping over €150 · two samples with every order
+              订单满€150免邮 · 每笔订单随赠两份小样
             </p>
             {ordered ? (
               <p className="w-full border border-bronze/50 bg-cream py-4 text-center font-serif text-lg italic text-golddeep">
-                Merci — this boutique is a concept, no charge was made.
+                  谢谢——本精品店为概念展示，未实际扣款。
               </p>
             ) : (
               <button
                 onClick={() => setOrdered(true)}
                 className="w-full bg-umber py-4 text-[11px] uppercase tracking-[0.35em] text-ivory transition-colors duration-500 hover:bg-golddeep"
               >
-                Proceed to checkout
+                前往结账
               </button>
             )}
           </div>

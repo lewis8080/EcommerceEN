@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../hooks/useSmoothScroll'
 
 const WORDS =
-  'We believe an ingredient should earn its place. Each of ours is traced to a single harvest, fermented until it softens, and blended at the moment it peaks.'
+  '我们相信每一种成分都应凭实力赢得它的位置。每一种原料都可追溯至一次单一采收，发酵至柔和，并在其巅峰时刻调和。'
 
 export default function Manifesto() {
   const root = useRef<HTMLElement>(null)
@@ -32,7 +32,7 @@ export default function Manifesto() {
     <section id="serum" ref={root} className="relative py-36 md:py-48">
       <div className="mx-auto max-w-4xl px-6 md:px-10">
         <p className="mb-10 text-center text-[11px] uppercase tracking-[0.4em] text-bronze">
-          The philosophy
+          品牌哲学
         </p>
         <p className="text-balance text-center font-serif text-3xl font-light leading-snug md:text-[2.9rem] md:leading-[1.25]">
           {WORDS.split(' ').map((w, i) => (
@@ -42,7 +42,7 @@ export default function Manifesto() {
           ))}
         </p>
         <p className="mt-12 text-center font-serif text-lg italic text-smoke">
-          — Maison La Lumière, Grasse
+          — La Lumière 品牌，格拉斯
         </p>
       </div>
     </section>

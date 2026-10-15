@@ -42,7 +42,7 @@ export default function ProductPage() {
           to="/shop"
           className="pd-fade mb-12 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-smoke transition-colors hover:text-umber"
         >
-          ← The boutique
+          ← 精品店
         </Link>
 
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-2 lg:gap-20">
@@ -119,16 +119,16 @@ export default function ProductPage() {
                 onClick={() => add(product.slug, qty)}
                 className="flex-1 bg-umber py-3 text-[11px] uppercase tracking-[0.35em] text-ivory transition-colors duration-500 hover:bg-golddeep"
               >
-                Add to bag — {formatPrice(product.price * qty)}
+                加入购物袋 — {formatPrice(product.price * qty)}
               </button>
             </div>
 
             <div className="pd-fade mt-10 divide-y divide-umber/10 border-y border-umber/10">
               {[
-                ['The ritual', product.ritual],
+                ['使用仪式', product.ritual],
                 [
-                  'Shipping & returns',
-                  'Pressed to order and shipped within three days, worldwide. Unopened pressings may be returned within thirty days — though few come back.',
+                  '配送与退换',
+                  '按需压榨，三日内全球发货。未开封产品可在三十日内退回——不过鲜有人退。',
                 ],
               ].map(([t, b]) => (
                 <details key={t} className="group py-5">
@@ -151,7 +151,7 @@ export default function ProductPage() {
         <div className="mt-32">
           <p className="mb-10 flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-bronze">
             <span className="h-px w-10 bg-bronze" />
-            Complete the ritual
+            完成仪式
           </p>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
             {others.map((p) => (

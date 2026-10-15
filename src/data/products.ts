@@ -4,7 +4,7 @@ export type Product = {
   latin: string
   price: number
   size: string
-  category: 'Serums' | 'Creams' | 'Mists' | 'Sets'
+  category: '精华液' | '面霜' | '喷雾' | '套装'
   img: string
   badge?: string
   short: string
@@ -16,68 +16,68 @@ export type Product = {
 export const PRODUCTS: Product[] = [
   {
     slug: 'illuminating-serum',
-    name: 'Illuminating Serum N°01',
+    name: '焕亮精华液 N°01',
     latin: 'Camellia · Riz · Fenouil de mer',
     price: 118,
     size: '30 ml',
-    category: 'Serums',
+    category: '精华液',
     img: '/images/hero-serum.png',
-    badge: 'First pressing',
-    short: 'The three-act ferment. Light, distilled into skin.',
+    badge: '首次压榨',
+    short: '三幕发酵。光影，凝入肌肤。',
     description:
-      'Our founding formula: a silk-light serum of cold-pressed tsubaki, ninety-day rice ferment and cliff-grown sea fennel. Blended in numbered pressings of one thousand bottles, rested forty days before release.',
-    notes: ['Camellia japonica — lipid veil', 'Oryza sativa ferment — tone', 'Crithmum maritimum — renewal'],
+      '我们的奠基之作：一支丝滑轻盈的精华液，由冷压山茶、九十日稻米发酵与岩生海茴香调和而成。以千瓶编号压榨，静置四十日后上市。',
+    notes: ['山茶花——脂质屏障', '稻米发酵——肤色', '海茴香——焕新'],
     ritual:
-      'Two drops, warmed between the palms and pressed — never rubbed — over damp skin, morning and evening.',
+      '两滴，掌心温热后按压——而非揉搓——于湿润肌肤之上，早晚各一次。',
   },
   {
     slug: 'velvet-renewal-cream',
-    name: 'Velvet Renewal Cream',
+    name: '丝绒焕新面霜',
     latin: 'Butyrospermum · Céramides',
     price: 96,
     size: '50 ml',
-    category: 'Creams',
+    category: '面霜',
     img: '/images/product-cream.png',
-    short: 'A whipped seal of shea and ceramides for the final gesture.',
+    short: '乳木果与神经酰胺的轻盈封存，作为最终一步。',
     description:
-      'Whipped shea, phytoceramides and a whisper of the same rice ferment, churned at low temperature so the emulsion never breaks. It seals the serum beneath a breathable, velvet finish.',
-    notes: ['Whipped shea — comfort', 'Phytoceramides — barrier', 'Rice ferment — continuity'],
+      '搅打乳木果、植物神经酰胺与一丝同样的稻米发酵，低温搅打以保乳化不破。它将精华液封存于一层透气的丝绒之下。',
+    notes: ['搅打乳木果——舒适', '植物神经酰胺——屏障', '稻米发酵——延续'],
     ritual:
-      'A pearl-sized amount pressed over the serum while skin is still damp, as the evening\u2019s final gesture.',
+      '精华液后、肌肤仍湿润时，取珍珠大小按压于面部，作为晚间最后一步。',
   },
   {
     slug: 'botanical-essence-mist',
-    name: 'Botanical Essence Mist',
+    name: '植物精萃喷雾',
     latin: 'Aloe · Rose de Grasse',
     price: 54,
     size: '100 ml',
-    category: 'Mists',
+    category: '喷雾',
     img: '/images/product-mist.png',
-    short: 'A weightless veil to wake the skin and set the ritual.',
+    short: '轻盈无重面纱，唤醒肌肤，定调仪式。',
     description:
-      'Distilled rose from our own Grasse fields, folded into aloe water and a trace of glycerin. A single pass wakes the skin, prepares it for the serum, and refreshes the ritual through the day.',
-    notes: ['Rose de Grasse — tone', 'Aloe water — calm', 'Vegetable glycerin — dew'],
+      '采自我们格拉斯自有花田的蒸馏玫瑰，融入芦荟水与一丝甘油。一次喷雾唤醒肌肤，为精华液做准备，并贯穿整日刷新仪式。',
+    notes: ['格拉斯玫瑰——肤色', '芦荟水——舒缓', '植物甘油——润泽'],
     ritual:
-      'Mist over clean skin before the serum, and again through the day whenever the light feels dry.',
+      '精华液前喷洒于洁净肌肤之上，日间感觉干燥时再次使用。',
   },
   {
     slug: 'discovery-ritual',
-    name: 'The Discovery Ritual',
+    name: '探索仪式套装',
     latin: 'Trio · 3 × 10 ml',
     price: 148,
     size: '3 × 10 ml',
-    category: 'Sets',
+    category: '套装',
     img: '/images/product-trio.png',
-    badge: 'Numbered',
-    short: 'The full evening ritual in travel size, numbered by hand.',
+    badge: '编号',
+    short: '完整晚间仪式的旅行装，手工编号。',
     description:
-      'The serum, the cream and the mist in numbered travel pressings — a fortnight of the full ritual, housed in a linen-wrapped coffret. The only way to meet the maison before committing to a full bottle.',
-    notes: ['Serum N°01 — 10 ml', 'Renewal Cream — 10 ml', 'Essence Mist — 10 ml'],
+      '精华液、面霜与喷雾的编号旅行装——两周完整仪式，装于亚麻包裹的礼盒中。这是在承诺正装之前认识品牌的唯一方式。',
+    notes: ['精华液 N°01——10 ml', '焕新面霜——10 ml', '精萃喷雾——10 ml'],
     ritual:
-      'Begin with the mist, press in the serum, seal with the cream. Repeat each evening for fourteen nights.',
+      '先喷喷雾，按压精华液，再封以面霜。每晚重复，持续十四夜。',
   },
 ]
 
-export const CATEGORIES = ['All', 'Serums', 'Creams', 'Mists', 'Sets'] as const
+export const CATEGORIES = ['全部', '精华液', '面霜', '喷雾', '套装'] as const
 
 export const formatPrice = (n: number) => `€${n}`

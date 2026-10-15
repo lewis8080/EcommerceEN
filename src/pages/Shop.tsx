@@ -7,12 +7,12 @@ import { useCart } from '../context/CartContext'
 export default function Shop() {
   const root = useRef<HTMLElement>(null)
   const [category, setCategory] =
-    useState<(typeof CATEGORIES)[number]>('All')
+    useState<(typeof CATEGORIES)[number]>('全部')
   const { add } = useCart()
 
   const products = useMemo(
     () =>
-      category === 'All'
+      category === '全部'
         ? PRODUCTS
         : PRODUCTS.filter((p) => p.category === category),
     [category]
@@ -56,21 +56,21 @@ export default function Shop() {
         {/* header */}
         <p className="shop-fade mb-8 flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-bronze">
           <span className="h-px w-10 bg-bronze" />
-          The boutique
+          精品店
         </p>
         <h1 className="font-serif text-5xl font-light leading-[1.05] md:text-7xl">
           <span className="block overflow-hidden">
-            <span className="shop-line block">Every formula</span>
+            <span className="shop-line block">每一方配方</span>
           </span>
           <span className="block overflow-hidden">
             <span className="shop-line block">
-              earns its <em className="italic text-bronze">shelf.</em>
+              都凭实力<em className="italic text-bronze">上架。</em>
             </span>
           </span>
         </h1>
         <p className="shop-fade mt-8 max-w-md text-sm font-light leading-relaxed tracking-wide text-smoke">
-          Four formulas, nothing seasonal, nothing limited for the sake of it.
-          Numbered pressings, rested before release.
+          四方配方，无关季节，不为限量而限量。
+          编号压榨，静置后上市。
         </p>
 
         {/* filters */}
@@ -89,7 +89,7 @@ export default function Shop() {
             </button>
           ))}
           <p className="ml-auto hidden text-[10px] uppercase tracking-[0.3em] text-smoke md:block">
-            {products.length} {products.length === 1 ? 'formula' : 'formulas'}
+            {products.length} 方配方
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default function Shop() {
                   </span>
                 )}
                 <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-ivory/90 py-3 text-center text-[10px] uppercase tracking-[0.35em] text-umber backdrop-blur-sm transition-transform duration-500 ease-out group-hover:translate-y-0">
-                  View the formula
+                  查看配方
                 </span>
               </Link>
 
@@ -141,7 +141,7 @@ export default function Shop() {
                 onClick={() => add(p.slug)}
                 className="mt-5 w-full border border-umber/30 py-3 text-[10px] uppercase tracking-[0.35em] transition-all duration-500 hover:bg-umber hover:text-ivory"
               >
-                Add to bag — {formatPrice(p.price)}
+                加入购物袋 — {formatPrice(p.price)}
               </button>
             </article>
           ))}
@@ -150,9 +150,9 @@ export default function Shop() {
         {/* service notes */}
         <div className="mt-28 grid grid-cols-1 gap-px bg-umber/10 md:grid-cols-3">
           {[
-            ['Numbered pressings', 'Every bottle is pressed, rested and numbered by hand.'],
-            ['Complimentary shipping', 'On all orders over €150, worldwide, carbon-neutral.'],
-            ['Two samples, always', 'Each order travels with two 2 ml pressings to gift or keep.'],
+            ['编号压榨', '每一瓶均经手工压榨、静置与编号。'],
+            ['免邮优惠', '全球订单满€150免邮，碳中和配送。'],
+            ['随赠两份小样', '每笔订单随附两份2ml压榨小样，可赠可留。'],
           ].map(([t, b]) => (
             <div key={t} className="bg-ivory p-8">
               <p className="font-serif text-lg italic text-golddeep">{t}</p>

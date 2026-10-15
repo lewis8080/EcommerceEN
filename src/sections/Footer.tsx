@@ -13,20 +13,20 @@ export default function Footer() {
           </Link>
           <div className="flex flex-wrap gap-x-10 gap-y-3 text-[11px] uppercase tracking-[0.3em]">
             <Link to="/maison" className="transition-colors hover:text-ivory">
-              Maison
+              品牌故事
             </Link>
             <Link to="/shop" className="transition-colors hover:text-ivory">
-              Shop
+              购物
             </Link>
             <Link
               to="/product/illuminating-serum"
               className="transition-colors hover:text-ivory"
             >
-              Serum N°01
+              精华液 N°01
             </Link>
           </div>
           <p className="text-[11px] uppercase tracking-[0.3em]">
-            Grasse · Kyoto · Bretagne — © 2026
+            Grasse · Kyoto · Bretagne —— © 2026
           </p>
         </div>
       </div>

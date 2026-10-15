@@ -15,31 +15,31 @@ const CHAPTERS: Chapter[] = [
   {
     index: '01',
     latin: 'Camellia japonica',
-    name: 'Tsubaki, cold-pressed',
-    origin: 'Jeju Island, South Korea',
+    name: '山茶，冷压萃取',
+    origin: '韩国 济州岛',
     story:
-      'Hand-gathered after the first frost, when the blossom holds the most oil. The seeds are pressed once, cold, within six hours — yielding a silk-light lipid that mirrors skin\u2019s own sebum and vanishes on contact.',
-    note: 'Restores the lipid veil · omega-9',
+      '初霜后手工采摘，此时花朵含油最丰。种子在六小时内冷压一次，得到丝滑轻脂，与肌肤自身皮脂如出一辙，触肤即融。',
+    note: '修复脂质屏障 · omega-9',
     img: '/images/ingredient-camellia.png',
   },
   {
     index: '02',
     latin: 'Oryza sativa',
-    name: 'Rice, ninety days fermented',
-    origin: 'Niigata Prefecture, Japan',
+    name: '稻米，九十日发酵',
+    origin: '日本 新潟县',
     story:
-      'Polished rice is inoculated with koji and left in cedar vats through a full season. Fermentation shatters its starches into peptides, amino acids and natural kojic acid — the quiet chemistry of luminosity.',
-    note: 'Refines tone · fermented peptides',
+      '精白米接种麹菌，置于杉木桶中历经一整季发酵。发酵将淀粉分解为多肽、氨基酸和天然麹酸——焕亮的静默化学。',
+    note: '提亮肤色 · 发酵多肽',
     img: '/images/ingredient-rice.png',
   },
   {
     index: '03',
     latin: 'Crithmum maritimum',
-    name: 'Sea fennel, rock-grown',
-    origin: 'Cliffs of Brittany, France',
+    name: '海茴香，岩生',
+    origin: '法国 布列塔尼海岸',
     story:
-      'It roots in granite where salt spray forbids almost everything else. To survive, the plant builds an arsenal of antioxidants and vitamin C — harvested by rope, one cliff at a time, never more than a third of any colony.',
-    note: 'Defends & renews · marine retinol alternative',
+      '它扎根于花岗岩上，盐雾令几乎一切无法生长。为求生存，植物构建了丰富的抗氧化物与维生素C——以绳索攀崖采摘，每次不超过群体的三分之一。',
+    note: '防御与焕新 · 海洋视黄醇替代',
     img: '/images/ingredient-seafennel.png',
   },
 ]
@@ -113,7 +113,7 @@ export default function Ingredients() {
         {/* header row */}
         <div className="mx-auto flex w-full max-w-7xl items-end justify-between px-6 pt-28 md:px-10">
           <p className="text-[11px] uppercase tracking-[0.4em] text-bronze">
-            The formula — three acts
+            配方——三幕
           </p>
           <p className="font-serif text-2xl text-umber/60">
             <span ref={numRef}>01</span>

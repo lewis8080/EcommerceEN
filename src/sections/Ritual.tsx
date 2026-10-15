@@ -4,18 +4,18 @@ import { gsap } from '../hooks/useSmoothScroll'
 const STEPS = [
   {
     n: 'I',
-    title: 'Warm',
-    body: 'Two drops between the palms. Let the oil reach skin temperature — never apply it cold.',
+    title: '温热',
+    body: '两滴于掌心之间。让油达到肤温——切勿冷涂。',
   },
   {
     n: 'II',
-    title: 'Press',
-    body: 'Press, don\u2019t rub. Hold over the cheeks and brow for three breaths, letting the ferment absorb.',
+    title: '按压',
+    body: '按压，而非揉搓。在脸颊与额头处停留三次呼吸，让发酵精华吸收。',
   },
   {
     n: 'III',
-    title: 'Seal',
-    body: 'Mist or cream over the top while skin is still damp. Light needs something to hold onto.',
+    title: '封存',
+    body: '在肌肤仍湿润时覆盖喷雾或面霜。光需要可以依附之处。',
   },
 ]
 
@@ -59,17 +59,17 @@ export default function Ritual() {
           <div>
             <p className="mb-6 flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-bronze">
               <span className="h-px w-10 bg-bronze" />
-              The evening ritual
+              晚间仪式
             </p>
             <h2 className="font-serif text-5xl font-light leading-tight md:text-7xl">
-              Three gestures,
+              三种手势，
               <br />
-              <em className="italic text-bronze">ninety seconds.</em>
+              <em className="italic text-bronze">九十秒。</em>
             </h2>
           </div>
           <p className="max-w-xs text-sm font-light leading-relaxed text-smoke">
-            Efficacy is a rhythm, not a race. The serum asks for a minute and a
-            half of your evening — and gives back the morning.
+            功效是韵律，而非竞赛。这支精华液只需你晚间的一分半钟——
+            回馈你清晨的光采。
           </p>
         </div>
 
@@ -93,14 +93,14 @@ export default function Ritual() {
         <div className="ritual-img relative mt-24 h-[52vh] overflow-hidden md:h-[70vh]">
           <img
             src="/images/texture-cream.png"
-            alt="Silky cream texture on warm stone"
+            alt="温暖石面上的丝滑面霜质地"
             className="h-[115%] w-full scale-105 object-cover"
           />
           <div className="absolute inset-0 flex items-end bg-gradient-to-t from-umber/35 to-transparent p-8 md:p-14">
             <p className="font-serif text-2xl italic text-ivory md:text-4xl">
-              “It should feel like nothing,
+              「起初感觉不到什么，
               <br />
-              until it feels like everything.”
+              直到感受到一切。」
             </p>
           </div>
         </div>
