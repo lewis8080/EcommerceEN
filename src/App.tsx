@@ -8,6 +8,7 @@ import Nav from './sections/Nav'
 import Footer from './sections/Footer'
 import CartDrawer from './components/CartDrawer'
 import { CartProvider } from './context/CartContext'
+import { LanguageProvider } from './context/LanguageContext'
 import { useSmoothScroll, ScrollTrigger } from './hooks/useSmoothScroll'
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
   }, [location.pathname])
 
   return (
+    <LanguageProvider>
     <CartProvider>
       <div className="grain relative">
         <Nav />
@@ -49,5 +51,6 @@ export default function App() {
         <CartDrawer />
       </div>
     </CartProvider>
+    </LanguageProvider>
   )
 }

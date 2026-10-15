@@ -1,6 +1,9 @@
 import { Link } from 'react-router'
+import { useLang } from '../context/LanguageContext'
 
 export default function Footer() {
+  const { lang } = useLang()
+
   return (
     <footer className="bg-umber pb-10 pt-16 text-ivory/50">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
@@ -13,20 +16,20 @@ export default function Footer() {
           </Link>
           <div className="flex flex-wrap gap-x-10 gap-y-3 text-[11px] uppercase tracking-[0.3em]">
             <Link to="/maison" className="transition-colors hover:text-ivory">
-              品牌故事
+              {lang === 'zh' ? '品牌故事' : 'Maison'}
             </Link>
             <Link to="/shop" className="transition-colors hover:text-ivory">
-              购物
+              {lang === 'zh' ? '购物' : 'Shop'}
             </Link>
             <Link
               to="/product/illuminating-serum"
               className="transition-colors hover:text-ivory"
             >
-              精华液 N°01
+              {lang === 'zh' ? '精华液 N°01' : 'Serum N°01'}
             </Link>
           </div>
           <p className="text-[11px] uppercase tracking-[0.3em]">
-            Grasse · Kyoto · Bretagne —— © 2026
+            Grasse · Kyoto · Bretagne — © 2026
           </p>
         </div>
       </div>

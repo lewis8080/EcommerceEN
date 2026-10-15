@@ -1,8 +1,10 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../hooks/useSmoothScroll'
+import { useLang } from '../context/LanguageContext'
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null)
+  const { lang } = useLang()
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -51,7 +53,7 @@ export default function Hero() {
       ScrollTrigger.refresh()
     }, root)
     return () => ctx.revert()
-  }, [])
+  }, [lang])
 
   return (
     <section
@@ -67,23 +69,34 @@ export default function Hero() {
         <div className="hero-head relative z-10 md:col-span-7">
           <p className="hero-fade mb-8 flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-bronze">
             <span className="h-px w-10 bg-bronze" />
-            高端护肤 · N°01
+            {lang === 'zh' ? '高端护肤 · N°01' : 'Haute Skincare · N°01'}
           </p>
 
           <h1 className="font-serif text-[13vw] font-light leading-[0.95] tracking-tight md:text-[6.5rem]">
             <span className="block overflow-hidden">
-              <span className="hero-line-inner block">光影，凝萃</span>
+              <span className="hero-line-inner block">
+                {lang === 'zh' ? '光影，凝萃' : 'Light, distilled'}
+              </span>
             </span>
             <span className="block overflow-hidden">
               <span className="hero-line-inner block">
-                凝入<em className="font-normal not-italic text-bronze italic">肌肤。</em>
+                {lang === 'zh' ? (
+                  <>
+                    凝入<em className="font-normal not-italic text-bronze italic">肌肤。</em>
+                  </>
+                ) : (
+                  <>
+                    into <em className="font-normal not-italic text-bronze italic">skin.</em>
+                  </>
+                )}
               </span>
             </span>
           </h1>
 
           <p className="hero-fade mt-10 max-w-md text-sm font-light leading-relaxed tracking-wide text-smoke">
-            一支焕亮精华液，由三种植物慢发酵九十日而成。
-            不多不少——因为肌肤记得你让它承载的一切。
+            {lang === 'zh'
+              ? '一支焕亮精华液，由三种植物慢发酵九十日而成。不多不少——因为肌肤记得你让它承载的一切。'
+              : 'A single illuminating serum, slow-fermented for ninety days from three botanicals. Nothing more — because skin remembers everything you ask it to carry.'}
           </p>
 
           <div className="hero-fade mt-12 flex items-center gap-8">
@@ -94,7 +107,7 @@ export default function Hero() {
               <span className="flex h-12 w-12 items-center justify-center rounded-full border border-umber/30 transition-all duration-500 group-hover:bg-umber group-hover:text-ivory">
                 ↓
               </span>
-              认识成分
+              {lang === 'zh' ? '认识成分' : 'Meet the ingredients'}
             </a>
           </div>
         </div>
@@ -103,12 +116,12 @@ export default function Hero() {
           <div className="hero-img relative overflow-hidden rounded-t-[10rem]">
             <img
               src="/images/hero-serum.png"
-              alt="La Lumière 焕亮精华液置于石灰华石上"
+              alt={lang === 'zh' ? 'La Lumière 焕亮精华液置于石灰华石上' : 'La Lumière Illuminating Serum on travertine stone'}
               className="h-[62vh] w-full scale-110 object-cover md:h-[74vh]"
             />
           </div>
           <p className="hero-fade vertical-text absolute -right-7 top-10 hidden text-[10px] uppercase tracking-[0.5em] text-smoke md:block">
-            山茶 · 稻米 · 海茴香
+            {lang === 'zh' ? '山茶 · 稻米 · 海茴香' : 'Camellia · Riz · Fenouil de mer'}
           </p>
         </div>
       </div>
@@ -121,8 +134,9 @@ export default function Hero() {
               key={n}
               className="pr-8 font-serif text-lg italic tracking-wider text-umber/50"
             >
-              慢发酵 · 冷压 · 无香精 · 九十日的耐心 · 一方配方 ·
-              慢发酵 · 冷压 · 无香精 · 九十日的耐心 · 一方配方 ·&nbsp;
+              {lang === 'zh'
+                ? '慢发酵 · 冷压 · 无香精 · 九十日的耐心 · 一方配方 · 慢发酵 · 冷压 · 无香精 · 九十日的耐心 · 一方配方 ·&nbsp;'
+                : 'slow-fermented · cold-pressed · fragrance-free · 90 days of patience · one formula · slow-fermented · cold-pressed · fragrance-free · 90 days of patience · one formula ·&nbsp;'}
             </span>
           ))}
         </div>

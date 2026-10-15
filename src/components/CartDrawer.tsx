@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { formatPrice } from '../data/products'
+import { useLang } from '../context/LanguageContext'
 
 export default function CartDrawer() {
   const { lines, isOpen, closeCart, setQty, remove, productOf, subtotal, count } =
     useCart()
   const [ordered, setOrdered] = useState(false)
+  const { lang } = useLang()
 
   useEffect(() => {
     if (!isOpen) setOrdered(false)
@@ -38,12 +40,12 @@ export default function CartDrawer() {
       >
         <div className="flex items-center justify-between border-b border-umber/10 px-8 py-6">
           <p className="text-[11px] uppercase tracking-[0.35em] text-umber/70">
-            你的购物袋 {count > 0 && `· ${count}`}
+            {lang === 'zh' ? '你的购物袋' : 'Your bag'} {count > 0 && `· ${count}`}
           </p>
           <button
             onClick={closeCart}
             className="font-serif text-2xl leading-none text-umber/60 transition-colors hover:text-umber"
-            aria-label="关闭购物袋"
+            aria-label={lang === 'zh' ? '关闭购物袋' : 'Close bag'}
           >
             ×
           </button>
@@ -53,11 +55,12 @@ export default function CartDrawer() {
           {lines.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
               <p className="font-serif text-2xl italic text-umber/60">
-                你的购物袋是空的。
+                {lang === 'zh' ? '你的购物袋是空的。' : 'Your bag is empty.'}
               </p>
               <p className="mt-3 max-w-[16rem] text-xs font-light leading-relaxed text-smoke">
-                从精华液开始——或让探索仪式套装
-                带你认识。
+                {lang === 'zh'
+                  ? '从精华液开始——或让探索仪式套装带你认识。'
+                  : 'Begin with the serum — or let the Discovery Ritual introduce you.'}
               </p>
             </div>
           ) : (
@@ -70,7 +73,7 @@ export default function CartDrawer() {
                     <div className="h-24 w-20 shrink-0 overflow-hidden bg-cream">
                       <img
                         src={p.img}
-                        alt={p.name}
+                        alt={p.name[lang]}
                         className="h-full w-full object-cover"
                       />
                     </div>
@@ -78,7 +81,7 @@ export default function CartDrawer() {
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <p className="font-serif text-lg leading-tight">
-                            {p.name}
+                            {p.name[lang]}
                           </p>
                           <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-smoke">
                             {p.size}
@@ -93,7 +96,7 @@ export default function CartDrawer() {
                           <button
                             onClick={() => setQty(l.slug, l.qty - 1)}
                             className="px-3 py-1 text-sm transition-colors hover:bg-cream"
-                            aria-label="Decrease"
+                            aria-label={lang === 'zh' ? '减少' : 'Decrease'}
                           >
                             −
                           </button>
@@ -101,7 +104,7 @@ export default function CartDrawer() {
                           <button
                             onClick={() => setQty(l.slug, l.qty + 1)}
                             className="px-3 py-1 text-sm transition-colors hover:bg-cream"
-                            aria-label="Increase"
+                            aria-label={lang === 'zh' ? '增加' : 'Increase'}
                           >
                             +
                           </button>
@@ -110,7 +113,7 @@ export default function CartDrawer() {
                           onClick={() => remove(l.slug)}
                           className="text-[10px] uppercase tracking-[0.25em] text-smoke underline-offset-4 transition-colors hover:text-umber hover:underline"
                         >
-                          移除
+                          {lang === 'zh' ? '移除' : 'Remove'}
                         </button>
                       </div>
                     </div>
@@ -125,23 +128,27 @@ export default function CartDrawer() {
           <div className="border-t border-umber/10 px-8 py-6">
             <div className="mb-1 flex items-center justify-between">
               <p className="text-[11px] uppercase tracking-[0.3em] text-umber/70">
-                小计
+                {lang === 'zh' ? '小计' : 'Subtotal'}
               </p>
               <p className="font-serif text-2xl">{formatPrice(subtotal)}</p>
             </div>
             <p className="mb-5 text-[10px] font-light tracking-wide text-smoke">
-              订单满€150免邮 · 每笔订单随赠两份小样
+              {lang === 'zh'
+                ? '订单满€150免邮 · 每笔订单随赠两份小样'
+                : 'Complimentary shipping over €150 · two samples with every order'}
             </p>
             {ordered ? (
               <p className="w-full border border-bronze/50 bg-cream py-4 text-center font-serif text-lg italic text-golddeep">
-                  谢谢——本精品店为概念展示，未实际扣款。
+                {lang === 'zh'
+                  ? '谢谢——本精品店为概念展示，未实际扣款。'
+                  : 'Merci — this boutique is a concept, no charge was made.'}
               </p>
             ) : (
               <button
                 onClick={() => setOrdered(true)}
                 className="w-full bg-umber py-4 text-[11px] uppercase tracking-[0.35em] text-ivory transition-colors duration-500 hover:bg-golddeep"
               >
-                前往结账
+                {lang === 'zh' ? '前往结账' : 'Proceed to checkout'}
               </button>
             )}
           </div>

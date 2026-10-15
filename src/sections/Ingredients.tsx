@@ -1,13 +1,15 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../hooks/useSmoothScroll'
+import { useLang } from '../context/LanguageContext'
+import type { Lang } from '../context/LanguageContext'
 
 type Chapter = {
   index: string
   latin: string
-  name: string
-  origin: string
-  story: string
-  note: string
+  name: Record<Lang, string>
+  origin: Record<Lang, string>
+  story: Record<Lang, string>
+  note: Record<Lang, string>
   img: string
 }
 
@@ -15,31 +17,37 @@ const CHAPTERS: Chapter[] = [
   {
     index: '01',
     latin: 'Camellia japonica',
-    name: '山茶，冷压萃取',
-    origin: '韩国 济州岛',
-    story:
-      '初霜后手工采摘，此时花朵含油最丰。种子在六小时内冷压一次，得到丝滑轻脂，与肌肤自身皮脂如出一辙，触肤即融。',
-    note: '修复脂质屏障 · omega-9',
+    name: { zh: '山茶，冷压萃取', en: 'Tsubaki, cold-pressed' },
+    origin: { zh: '韩国 济州岛', en: 'Jeju Island, South Korea' },
+    story: {
+      zh: '初霜后手工采摘，此时花朵含油最丰。种子在六小时内冷压一次，得到丝滑轻脂，与肌肤自身皮脂如出一辙，触肤即融。',
+      en: 'Hand-gathered after the first frost, when the blossom holds the most oil. The seeds are pressed once, cold, within six hours — yielding a silk-light lipid that mirrors skin\u2019s own sebum and vanishes on contact.',
+    },
+    note: { zh: '修复脂质屏障 · omega-9', en: 'Restores the lipid veil · omega-9' },
     img: '/images/ingredient-camellia.png',
   },
   {
     index: '02',
     latin: 'Oryza sativa',
-    name: '稻米，九十日发酵',
-    origin: '日本 新潟县',
-    story:
-      '精白米接种麹菌，置于杉木桶中历经一整季发酵。发酵将淀粉分解为多肽、氨基酸和天然麹酸——焕亮的静默化学。',
-    note: '提亮肤色 · 发酵多肽',
+    name: { zh: '稻米，九十日发酵', en: 'Rice, ninety days fermented' },
+    origin: { zh: '日本 新潟县', en: 'Niigata Prefecture, Japan' },
+    story: {
+      zh: '精白米接种麹菌，置于杉木桶中历经一整季发酵。发酵将淀粉分解为多肽、氨基酸和天然麹酸——焕亮的静默化学。',
+      en: 'Polished rice is inoculated with koji and left in cedar vats through a full season. Fermentation shatters its starches into peptides, amino acids and natural kojic acid — the quiet chemistry of luminosity.',
+    },
+    note: { zh: '提亮肤色 · 发酵多肽', en: 'Refines tone · fermented peptides' },
     img: '/images/ingredient-rice.png',
   },
   {
     index: '03',
     latin: 'Crithmum maritimum',
-    name: '海茴香，岩生',
-    origin: '法国 布列塔尼海岸',
-    story:
-      '它扎根于花岗岩上，盐雾令几乎一切无法生长。为求生存，植物构建了丰富的抗氧化物与维生素C——以绳索攀崖采摘，每次不超过群体的三分之一。',
-    note: '防御与焕新 · 海洋视黄醇替代',
+    name: { zh: '海茴香，岩生', en: 'Sea fennel, rock-grown' },
+    origin: { zh: '法国 布列塔尼海岸', en: 'Cliffs of Brittany, France' },
+    story: {
+      zh: '它扎根于花岗岩上，盐雾令几乎一切无法生长。为求生存，植物构建了丰富的抗氧化物与维生素C——以绳索攀崖采摘，每次不超过群体的三分之一。',
+      en: 'It roots in granite where salt spray forbids almost everything else. To survive, the plant builds an arsenal of antioxidants and vitamin C — harvested by rope, one cliff at a time, never more than a third of any colony.',
+    },
+    note: { zh: '防御与焕新 · 海洋视黄醇替代', en: 'Defends & renews · marine retinol alternative' },
     img: '/images/ingredient-seafennel.png',
   },
 ]
@@ -47,6 +55,7 @@ const CHAPTERS: Chapter[] = [
 export default function Ingredients() {
   const root = useRef<HTMLElement>(null)
   const numRef = useRef<HTMLSpanElement>(null)
+  const { lang } = useLang()
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -57,7 +66,6 @@ export default function Ingredients() {
           end: 'bottom bottom',
           scrub: 0.7,
           onUpdate: (self) => {
-            // thresholds match the scrub timeline (transitions at t=1.4 and t=2.9, total ≈3.85)
             const p = self.progress
             const idx = p >= 0.75 ? 2 : p >= 0.36 ? 1 : 0
             if (numRef.current) {
@@ -70,10 +78,8 @@ export default function Ingredients() {
       CHAPTERS.forEach((_, i) => {
         if (i === 0) return
         const at = [1.4, 2.9][i - 1]
-        // outgoing
         tl.to(`.ing-text-${i - 1}`, { autoAlpha: 0, y: -44, duration: 0.5, ease: 'power2.in' }, at)
         tl.to(`.ing-img-${i - 1}`, { autoAlpha: 0, scale: 1.06, duration: 0.6, ease: 'power2.in' }, at)
-        // incoming
         tl.fromTo(
           `.ing-img-${i}`,
           { autoAlpha: 0, scale: 1.12 },
@@ -88,7 +94,6 @@ export default function Ingredients() {
         )
       })
 
-      // gentle drift on the active images throughout
       gsap.utils.toArray<HTMLElement>('.ing-img-inner').forEach((el) => {
         gsap.to(el, {
           yPercent: -6,
@@ -105,7 +110,7 @@ export default function Ingredients() {
       ScrollTrigger.refresh()
     }, root)
     return () => ctx.revert()
-  }, [])
+  }, [lang])
 
   return (
     <section id="ingredients" ref={root} className="relative h-[420vh]">
@@ -113,7 +118,7 @@ export default function Ingredients() {
         {/* header row */}
         <div className="mx-auto flex w-full max-w-7xl items-end justify-between px-6 pt-28 md:px-10">
           <p className="text-[11px] uppercase tracking-[0.4em] text-bronze">
-            配方——三幕
+            {lang === 'zh' ? '配方——三幕' : 'The formula — three acts'}
           </p>
           <p className="font-serif text-2xl text-umber/60">
             <span ref={numRef}>01</span>
@@ -135,17 +140,17 @@ export default function Ingredients() {
                   N°{c.index} — {c.latin}
                 </p>
                 <h2 className="font-serif text-4xl font-light leading-tight md:text-6xl">
-                  {c.name}
+                  {c.name[lang]}
                 </h2>
                 <p className="mt-3 text-[11px] uppercase tracking-[0.35em] text-smoke">
-                  {c.origin}
+                  {c.origin[lang]}
                 </p>
                 <p className="mt-8 max-w-md text-sm font-light leading-relaxed tracking-wide text-umber/80">
-                  {c.story}
+                  {c.story[lang]}
                 </p>
                 <p className="mt-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-golddeep">
                   <span className="h-px w-8 bg-bronze" />
-                  {c.note}
+                  {c.note[lang]}
                 </p>
               </div>
             ))}
