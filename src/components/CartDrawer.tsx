@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import { formatPrice } from '../data/products'
 import { useLang } from '../context/LanguageContext'
 import { supabase } from '../lib/supabase'
@@ -7,6 +9,8 @@ import { supabase } from '../lib/supabase'
 export default function CartDrawer() {
   const { lines, isOpen, closeCart, setQty, remove, productOf, subtotal, count } =
     useCart()
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const [ordered, setOrdered] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
@@ -26,6 +30,11 @@ export default function CartDrawer() {
   }, [closeCart])
 
   const handleCheckout = async () => {
+    if (!user) {
+      closeCart()
+      navigate('/auth?redirect=/shop')
+      return
+    }
     setLoading(true)
     setErrorMsg('')
     try {
@@ -185,9 +194,13 @@ export default function CartDrawer() {
                   ? lang === 'zh'
                     ? '正在准备付款…'
                     : 'Preparing payment…'
-                  : lang === 'zh'
-                    ? '前往结账'
-                    : 'Proceed to checkout'}
+                  : !user
+                    ? lang === 'zh'
+                      ? '登录后结账'
+                      : 'Sign in to checkout'
+                    : lang === 'zh'
+                      ? '前往结账'
+                      : 'Proceed to checkout'}
               </button>
             )}
           </div>

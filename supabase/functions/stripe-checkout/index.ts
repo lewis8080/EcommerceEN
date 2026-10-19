@@ -17,9 +17,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, Apikey',
 };
 
-// Product catalog — prices in EUR cents, matched by slug
-const CATALOG: Record<string, { name: string; price: number; image?: string }> = {
-  'illuminating-serum': { name: 'Illuminating Serum N°01', price: 11800, image: '/images/hero-serum.png' },
+const CATALOG: Record<string, { name: string; price: number }> = {
+  'illuminating-serum': { name: 'Illuminating Serum N°01', price: 11800 },
   'velvet-renewal-cream': { name: 'Velvet Renewal Cream', price: 9600 },
   'botanical-essence-mist': { name: 'Botanical Essence Mist', price: 5400 },
   'discovery-ritual': { name: 'The Discovery Ritual', price: 14800 },
@@ -38,6 +37,25 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Authenticate the user
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Authentication required' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: getUserError } = await supabase.auth.getUser(token);
+
+    if (getUserError || !user) {
+      return new Response(JSON.stringify({ error: 'Authentication required' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const { items, success_url, cancel_url } = await req.json();
 
     if (!Array.isArray(items) || items.length === 0) {
@@ -45,6 +63,41 @@ Deno.serve(async (req) => {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
+    }
+
+    // Look up or create Stripe customer for this user
+    const { data: existingCustomer } = await supabase
+      .from('stripe_customers')
+      .select('customer_id')
+      .eq('user_id', user.id)
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    let customerId: string;
+
+    if (existingCustomer?.customer_id) {
+      customerId = existingCustomer.customer_id;
+    } else {
+      const newCustomer = await stripe.customers.create({
+        email: user.email ?? undefined,
+        metadata: { userId: user.id },
+      });
+
+      const { error: insertError } = await supabase.from('stripe_customers').insert({
+        user_id: user.id,
+        customer_id: newCustomer.id,
+      });
+
+      if (insertError) {
+        console.error('Failed to save customer mapping:', insertError);
+        try { await stripe.customers.del(newCustomer.id); } catch {}
+        return new Response(JSON.stringify({ error: 'Failed to create customer' }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      customerId = newCustomer.id;
     }
 
     // Build Stripe line items from the cart
@@ -63,28 +116,29 @@ Deno.serve(async (req) => {
         price_data: {
           currency: 'eur',
           unit_amount: product.price,
-          product_data: {
-            name: product.name,
-          },
+          product_data: { name: product.name },
         },
       });
     }
 
-    // Create a placeholder customer record for guest checkout
     const session = await stripe.checkout.sessions.create({
+      customer: customerId,
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
       success_url,
       cancel_url,
-      shipping_address_collection: { allowed_countries: ['FR', 'DE', 'GB', 'US', 'JP', 'CN', 'IT', 'ES', 'NL', 'BE'] },
+      shipping_address_collection: {
+        allowed_countries: ['FR', 'DE', 'GB', 'US', 'JP', 'CN', 'IT', 'ES', 'NL', 'BE'],
+      },
     });
 
-    // Pre-create an order record with pending status
+    // Pre-create order record linked to this user
     const { error: orderError } = await supabase.from('stripe_orders').insert({
       checkout_session_id: session.id,
-      payment_intent_id: session.payment_intent as string ?? '',
-      customer_id: session.customer as string ?? '',
+      payment_intent_id: (session.payment_intent as string) ?? '',
+      customer_id: customerId,
+      user_id: user.id,
       amount_subtotal: session.amount_subtotal ?? 0,
       amount_total: session.amount_total ?? 0,
       currency: session.currency ?? 'eur',

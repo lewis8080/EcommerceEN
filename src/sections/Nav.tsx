@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import { useLang } from '../context/LanguageContext'
 import type { Lang } from '../context/LanguageContext'
 
@@ -20,6 +21,7 @@ const anchors: Record<Lang, { label: string; hash: string }[]> = {
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const { count, openCart } = useCart()
+  const { user, signOut } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const { lang, toggle } = useLang()
@@ -85,6 +87,29 @@ export default function Nav() {
           >
             {lang === 'zh' ? 'EN' : '中文'}
           </button>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link
+                to="/orders"
+                className="text-[11px] uppercase tracking-[0.3em] text-umber/70 transition-colors hover:text-umber"
+              >
+                {lang === 'zh' ? '订单' : 'Orders'}
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="text-[11px] uppercase tracking-[0.3em] text-umber/70 transition-colors hover:text-umber"
+              >
+                {lang === 'zh' ? '退出' : 'Sign Out'}
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/auth"
+              className="text-[11px] uppercase tracking-[0.3em] text-umber/70 transition-colors hover:text-umber"
+            >
+              {lang === 'zh' ? '登录' : 'Sign In'}
+            </Link>
+          )}
           <button
             onClick={openCart}
             className="relative border border-umber/30 px-5 py-2 text-[11px] uppercase tracking-[0.3em] transition-all duration-500 hover:bg-umber hover:text-ivory"

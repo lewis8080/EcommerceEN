@@ -5,11 +5,14 @@ import Shop from './pages/Shop'
 import ProductPage from './pages/ProductPage'
 import Maison from './pages/Maison'
 import Checkout from './pages/Checkout'
+import Auth from './pages/Auth'
+import Orders from './pages/Orders'
 import Nav from './sections/Nav'
 import Footer from './sections/Footer'
 import CartDrawer from './components/CartDrawer'
 import { CartProvider } from './context/CartContext'
 import { LanguageProvider } from './context/LanguageContext'
+import { AuthProvider } from './context/AuthContext'
 import { useSmoothScroll, ScrollTrigger } from './hooks/useSmoothScroll'
 
 export default function App() {
@@ -36,6 +39,7 @@ export default function App() {
 
   return (
     <LanguageProvider>
+    <AuthProvider>
     <CartProvider>
       <div className="grain relative">
         <Nav />
@@ -46,6 +50,8 @@ export default function App() {
             <Route path="/product/:slug" element={<ProductPage />} />
             <Route path="/maison" element={<Maison />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/orders" element={<Orders />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
@@ -53,6 +59,7 @@ export default function App() {
         <CartDrawer />
       </div>
     </CartProvider>
+    </AuthProvider>
     </LanguageProvider>
   )
 }
