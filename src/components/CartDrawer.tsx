@@ -52,7 +52,11 @@ export default function CartDrawer() {
 
       window.location.href = data.url
     } catch (err: any) {
-      setErrorMsg(err.message || 'Checkout failed')
+      setErrorMsg(
+        lang === 'zh'
+          ? translateCheckoutError(err.message, lang)
+          : err.message || 'Checkout failed'
+      )
       setLoading(false)
     }
   }
@@ -208,4 +212,19 @@ export default function CartDrawer() {
       </aside>
     </div>
   )
+}
+
+function translateCheckoutError(message: string, _lang: 'zh' | 'en'): string {
+  const m = (message || '').toLowerCase()
+  if (m.includes('authentication required') || m.includes('unauthorized'))
+    return '请先登录后再结账'
+  if (m.includes('cart is empty'))
+    return '购物袋是空的'
+  if (m.includes('unknown product'))
+    return '购物袋中有无法识别的商品'
+  if (m.includes('rate limit') || m.includes('too many'))
+    return '操作过于频繁，请稍后再试'
+  if (m.includes('network'))
+    return '网络连接失败，请检查后重试'
+  return '结账失败，请重试'
 }

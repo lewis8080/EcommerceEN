@@ -39,7 +39,7 @@ export default function Orders() {
 
   const formatAmount = (amount: number, currency: string) => {
     const value = amount / 100
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(lang === 'zh' ? 'zh-CN' : 'en-US', {
       style: 'currency',
       currency: currency.toUpperCase(),
     }).format(value)
@@ -52,6 +52,15 @@ export default function Orders() {
       canceled: { zh: '已取消', en: 'Canceled' },
     }
     return map[status]?.[lang] ?? status
+  }
+
+  const paymentStatusLabel = (paymentStatus: string) => {
+    const map: Record<string, { zh: string; en: string }> = {
+      paid: { zh: '已付款', en: 'Paid' },
+      unpaid: { zh: '待付款', en: 'Unpaid' },
+      no_payment_required: { zh: '无需付款', en: 'No payment required' },
+    }
+    return map[paymentStatus]?.[lang] ?? paymentStatus
   }
 
   return (
@@ -106,7 +115,7 @@ export default function Orders() {
                   {formatAmount(o.amount_total, o.currency)}
                 </p>
                 <p className="text-[10px] uppercase tracking-[0.25em] text-smoke">
-                  {o.payment_status}
+                  {paymentStatusLabel(o.payment_status)}
                 </p>
                 <span
                   className={`inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] ${

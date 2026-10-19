@@ -33,7 +33,7 @@ export default function Auth() {
     setLoading(false)
 
     if (result.error) {
-      setError(result.error)
+      setError(translateAuthError(result.error, lang))
     } else if (mode === 'signup') {
       // After signup, Supabase auto-signs in (email confirmation OFF)
       navigate(redirect, { replace: true })
@@ -146,4 +146,22 @@ export default function Auth() {
       </div>
     </section>
   )
+}
+
+function translateAuthError(message: string, lang: 'zh' | 'en'): string {
+  if (lang !== 'zh') return message
+  const m = message.toLowerCase()
+  if (m.includes('invalid login credentials') || m.includes('invalid credentials'))
+    return '邮箱或密码不正确'
+  if (m.includes('user already registered') || m.includes('already been registered'))
+    return '该邮箱已注册，请直接登录'
+  if (m.includes('password should be at least'))
+    return '密码至少需要6位字符'
+  if (m.includes('unable to validate email') || m.includes('email'))
+    return '请输入有效的邮箱地址'
+  if (m.includes('rate limit') || m.includes('too many'))
+    return '操作过于频繁，请稍后再试'
+  if (m.includes('network'))
+    return '网络连接失败，请检查后重试'
+  return '操作失败，请重试'
 }
