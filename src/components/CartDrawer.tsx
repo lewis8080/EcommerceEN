@@ -2,15 +2,21 @@ import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { formatPrice } from '../data/products'
 import { useLang } from '../context/LanguageContext'
+import { supabase } from '../lib/supabase'
 
 export default function CartDrawer() {
   const { lines, isOpen, closeCart, setQty, remove, productOf, subtotal, count } =
     useCart()
   const [ordered, setOrdered] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
   const { lang } = useLang()
 
   useEffect(() => {
-    if (!isOpen) setOrdered(false)
+    if (!isOpen) {
+      setOrdered(false)
+      setErrorMsg('')
+    }
   }, [isOpen])
 
   useEffect(() => {
@@ -19,12 +25,34 @@ export default function CartDrawer() {
     return () => window.removeEventListener('keydown', onKey)
   }, [closeCart])
 
+  const handleCheckout = async () => {
+    setLoading(true)
+    setErrorMsg('')
+    try {
+      const origin = window.location.origin
+      const { data, error } = await supabase.functions.invoke('stripe-checkout', {
+        body: {
+          items: lines.map((l) => ({ slug: l.slug, qty: l.qty })),
+          success_url: `${origin}/checkout?status=success`,
+          cancel_url: `${origin}/checkout?status=cancel`,
+        },
+      })
+
+      if (error) throw error
+      if (!data || !data.url) throw new Error('No checkout URL returned')
+
+      window.location.href = data.url
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Checkout failed')
+      setLoading(false)
+    }
+  }
+
   return (
     <div
       className={`fixed inset-0 z-[70] ${isOpen ? '' : 'pointer-events-none'}`}
       aria-hidden={!isOpen}
     >
-      {/* backdrop */}
       <div
         onClick={closeCart}
         className={`absolute inset-0 bg-umber/40 backdrop-blur-sm transition-opacity duration-500 ${
@@ -32,7 +60,6 @@ export default function CartDrawer() {
         }`}
       />
 
-      {/* panel */}
       <aside
         className={`absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-ivory shadow-2xl transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -137,18 +164,30 @@ export default function CartDrawer() {
                 ? '订单满€150免邮 · 每笔订单随赠两份小样'
                 : 'Complimentary shipping over €150 · two samples with every order'}
             </p>
+
+            {errorMsg && (
+              <p className="mb-3 text-center text-xs text-red-700">{errorMsg}</p>
+            )}
+
             {ordered ? (
               <p className="w-full border border-bronze/50 bg-cream py-4 text-center font-serif text-lg italic text-golddeep">
                 {lang === 'zh'
-                  ? '谢谢——本精品店为概念展示，未实际扣款。'
-                  : 'Merci — this boutique is a concept, no charge was made.'}
+                  ? '感谢您的购买——已跳转至 Stripe 完成付款。'
+                  : 'Redirecting to Stripe to complete your purchase…'}
               </p>
             ) : (
               <button
-                onClick={() => setOrdered(true)}
-                className="w-full bg-umber py-4 text-[11px] uppercase tracking-[0.35em] text-ivory transition-colors duration-500 hover:bg-golddeep"
+                onClick={handleCheckout}
+                disabled={loading}
+                className="w-full bg-umber py-4 text-[11px] uppercase tracking-[0.35em] text-ivory transition-colors duration-500 hover:bg-golddeep disabled:opacity-60"
               >
-                {lang === 'zh' ? '前往结账' : 'Proceed to checkout'}
+                {loading
+                  ? lang === 'zh'
+                    ? '正在准备付款…'
+                    : 'Preparing payment…'
+                  : lang === 'zh'
+                    ? '前往结账'
+                    : 'Proceed to checkout'}
               </button>
             )}
           </div>

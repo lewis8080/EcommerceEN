@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Shop from './pages/Shop'
 import ProductPage from './pages/ProductPage'
 import Maison from './pages/Maison'
+import Checkout from './pages/Checkout'
 import Nav from './sections/Nav'
 import Footer from './sections/Footer'
 import CartDrawer from './components/CartDrawer'
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="/shop" element={<Shop />} />
             <Route path="/product/:slug" element={<ProductPage />} />
             <Route path="/maison" element={<Maison />} />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
