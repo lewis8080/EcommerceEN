@@ -7,17 +7,23 @@ import Maison from './pages/Maison'
 import Checkout from './pages/Checkout'
 import Auth from './pages/Auth'
 import Orders from './pages/Orders'
+import AdminLayout from './pages/admin/AdminLayout'
+import AdminLogin from './pages/admin/AdminLogin'
+import AdminProducts from './pages/admin/AdminProducts'
+import AdminProductForm from './pages/admin/AdminProductForm'
 import Nav from './sections/Nav'
 import Footer from './sections/Footer'
 import CartDrawer from './components/CartDrawer'
 import { CartProvider } from './context/CartContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { AuthProvider } from './context/AuthContext'
+import { ProductsProvider } from './context/ProductsContext'
 import { useSmoothScroll, ScrollTrigger } from './hooks/useSmoothScroll'
 
 export default function App() {
   useSmoothScroll()
   const location = useLocation()
+  const isAdmin = location.pathname.startsWith('/admin')
 
   // route change: reset scroll, then land on hash target if present
   useEffect(() => {
@@ -40,9 +46,10 @@ export default function App() {
   return (
     <LanguageProvider>
     <AuthProvider>
+    <ProductsProvider>
     <CartProvider>
       <div className="grain relative">
-        <Nav />
+        {!isAdmin && <Nav />}
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -52,13 +59,20 @@ export default function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminLogin />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="products/new" element={<AdminProductForm />} />
+              <Route path="products/:slug" element={<AdminProductForm />} />
+            </Route>
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
-        <Footer />
-        <CartDrawer />
+        {!isAdmin && <Footer />}
+        {!isAdmin && <CartDrawer />}
       </div>
     </CartProvider>
+    </ProductsProvider>
     </AuthProvider>
     </LanguageProvider>
   )

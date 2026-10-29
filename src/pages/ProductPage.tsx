@@ -1,13 +1,15 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router'
 import { gsap } from '../hooks/useSmoothScroll'
-import { PRODUCTS, CATEGORY_LABELS, formatPrice } from '../data/products'
+import { CATEGORY_LABELS, formatPrice } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import { useCart } from '../context/CartContext'
 import { useLang } from '../context/LanguageContext'
 
 export default function ProductPage() {
   const { slug } = useParams()
-  const product = PRODUCTS.find((p) => p.slug === slug)
+  const { products, loading } = useProducts()
+  const product = products.find((p) => p.slug === slug)
   const root = useRef<HTMLElement>(null)
   const [qty, setQty] = useState(1)
   const { add } = useCart()
@@ -31,11 +33,21 @@ export default function ProductPage() {
       })
     }, root)
     return () => ctx.revert()
-  }, [slug])
+  }, [slug, loading])
+
+  if (loading) {
+    return (
+      <section className="pb-32 pt-40">
+        <p className="text-center text-[11px] uppercase tracking-[0.3em] text-smoke">
+          {lang === 'zh' ? '加载中…' : 'Loading…'}
+        </p>
+      </section>
+    )
+  }
 
   if (!product) return <Navigate to="/shop" replace />
 
-  const others = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3)
+  const others = products.filter((p) => p.slug !== product.slug).slice(0, 3)
 
   const details =
     lang === 'zh'

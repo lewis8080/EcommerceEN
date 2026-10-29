@@ -1,7 +1,8 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { gsap } from '../hooks/useSmoothScroll'
-import { CATEGORIES, PRODUCTS, formatPrice, type CategoryKey } from '../data/products'
+import { CATEGORIES, formatPrice, type CategoryKey } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import { useCart } from '../context/CartContext'
 import { useLang } from '../context/LanguageContext'
 
@@ -11,12 +12,13 @@ export default function Shop() {
   const { add } = useCart()
   const { lang } = useLang()
 
+  const { products: allProducts, loading, error } = useProducts()
   const products = useMemo(
     () =>
       categoryKey === 'all'
-        ? PRODUCTS
-        : PRODUCTS.filter((p) => p.category === (categoryKey as CategoryKey)),
-    [categoryKey]
+        ? allProducts
+        : allProducts.filter((p) => p.category === (categoryKey as CategoryKey)),
+    [allProducts, categoryKey]
   )
 
   useLayoutEffect(() => {
@@ -49,7 +51,7 @@ export default function Shop() {
       )
     }, root)
     return () => ctx.revert()
-  }, [categoryKey])
+  }, [categoryKey, loading])
 
   const serviceNotes =
     lang === 'zh'
@@ -115,6 +117,12 @@ export default function Shop() {
         </div>
 
         {/* grid */}
+        {error && <p className="mt-16 text-center text-sm text-red-700">{error}</p>}
+        {loading && (
+          <p className="mt-16 text-center text-[11px] uppercase tracking-[0.3em] text-smoke">
+            {lang === 'zh' ? '加载中…' : 'Loading…'}
+          </p>
+        )}
         <div className="mt-16 grid grid-cols-1 gap-x-10 gap-y-20 sm:grid-cols-2">
           {products.map((p) => (
             <article key={p.slug} className="product-card group">

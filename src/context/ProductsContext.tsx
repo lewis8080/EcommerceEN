@@ -1,4 +1,5 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { useLocation } from 'react-router'
 import { supabase } from '../lib/supabase'
 import type { Product } from '../data/products'
 
@@ -6,7 +7,6 @@ type ProductsContextValue = {
   products: Product[]
   loading: boolean
   error: string
-  reload: () => void
 }
 
 const ProductsContext = createContext<ProductsContextValue | null>(null)
@@ -15,9 +15,10 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [version, setVersion] = useState(0)
+  const inAdmin = useLocation().pathname.startsWith('/admin')
 
   useEffect(() => {
+    if (inAdmin) return
     let cancelled = false
     ;(async () => {
       setLoading(true)
@@ -37,12 +38,10 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true
     }
-  }, [version])
-
-  const reload = useCallback(() => setVersion((v) => v + 1), [])
+  }, [inAdmin])
 
   return (
-    <ProductsContext.Provider value={{ products, loading, error, reload }}>
+    <ProductsContext.Provider value={{ products, loading, error }}>
       {children}
     </ProductsContext.Provider>
   )
