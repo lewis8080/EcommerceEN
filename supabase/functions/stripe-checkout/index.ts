@@ -17,13 +17,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, Apikey',
 };
 
-const CATALOG: Record<string, { name: string; price: number }> = {
-  'illuminating-serum': { name: 'Illuminating Serum N°01', price: 11800 },
-  'velvet-renewal-cream': { name: 'Velvet Renewal Cream', price: 9600 },
-  'botanical-essence-mist': { name: 'Botanical Essence Mist', price: 5400 },
-  'discovery-ritual': { name: 'The Discovery Ritual', price: 14800 },
-};
-
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers: corsHeaders });
@@ -100,23 +93,31 @@ Deno.serve(async (req) => {
       customerId = newCustomer.id;
     }
 
-    // Build Stripe line items from the cart
+    // Prices come from the products table so the charged amount always matches the catalog
+    const slugs = items.map((item) => item?.slug).filter((s) => typeof s === 'string');
+    const { data: catalog, error: catalogError } = await supabase
+      .from('products')
+      .select('slug, name, price')
+      .in('slug', slugs);
+    if (catalogError) throw catalogError;
+    const catalogBySlug = new Map((catalog ?? []).map((p) => [p.slug, p]));
+
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
     for (const item of items) {
-      const product = CATALOG[item.slug];
+      const product = catalogBySlug.get(item?.slug);
       if (!product) {
         return new Response(
-          JSON.stringify({ error: `Unknown product: ${item.slug}` }),
+          JSON.stringify({ error: `Unknown product: ${item?.slug}` }),
           { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-      const qty = Math.max(1, Math.min(99, Math.floor(item.qty)));
+      const qty = Math.max(1, Math.min(99, Math.floor(Number(item.qty))));
       lineItems.push({
         quantity: qty,
         price_data: {
           currency: 'eur',
-          unit_amount: product.price,
-          product_data: { name: product.name },
+          unit_amount: product.price * 100,
+          product_data: { name: product.name.en },
         },
       });
     }

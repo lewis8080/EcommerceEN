@@ -7,7 +7,8 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { PRODUCTS, type Product } from '../data/products'
+import { type Product } from '../data/products'
+import { useProducts } from './ProductsContext'
 
 export type CartLine = { slug: string; qty: number }
 
@@ -37,6 +38,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   })
   const [isOpen, setIsOpen] = useState(false)
+  const { products } = useProducts()
 
   useEffect(() => {
     try {
@@ -70,21 +72,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const productOf = useCallback(
-    (slug: string) => PRODUCTS.find((p) => p.slug === slug),
-    []
+    (slug: string) => products.find((p) => p.slug === slug),
+    [products]
   )
 
   const { count, subtotal } = useMemo(() => {
     let c = 0
     let s = 0
     for (const l of lines) {
-      const p = PRODUCTS.find((x) => x.slug === l.slug)
+      const p = products.find((x) => x.slug === l.slug)
       if (!p) continue
       c += l.qty
       s += l.qty * p.price
     }
     return { count: c, subtotal: s }
-  }, [lines])
+  }, [lines, products])
 
   const value: CartContextValue = {
     lines,

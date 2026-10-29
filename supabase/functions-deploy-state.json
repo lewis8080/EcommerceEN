@@ -1,0 +1,17 @@
+{
+  "projectId": "72024695",
+  "functions": {
+    "stripe-checkout": {
+      "hasChanged": false,
+      "hash": "72158f7a39cb6014278c0e9d7895db9d85f04b3f3cf1f0627887abb48247e582"
+    },
+    "stripe-webhook": {
+      "hasChanged": false,
+      "hash": "6171cae9e98e24cc4273dee284a6d34457c8fa031481076cb99be625f1109ade"
+    },
+    "admin-products": {
+      "hasChanged": false,
+      "hash": "59f0987a5456ecc9a4e3d70c4ee2697e5a18fea1e4b3080286d5724016a6f866"
+    }
+  }
+}
