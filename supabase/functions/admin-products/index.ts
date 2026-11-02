@@ -6,8 +6,6 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 );
 
-const ADMIN_USERNAME = 'super';
-const ADMIN_PASSWORD = '900102';
 const SESSION_HOURS = 12;
 const CATEGORIES = ['serums', 'creams', 'mists', 'sets'];
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -127,7 +125,15 @@ Deno.serve(async (req) => {
     const action = body?.action;
 
     if (action === 'login') {
-      if (body.username !== ADMIN_USERNAME || body.password !== ADMIN_PASSWORD) {
+      if (!isNonEmptyString(body.username) || !isNonEmptyString(body.password)) {
+        return json({ error: '账号或密码不正确' }, 401);
+      }
+      const { data: loginOk, error: loginError } = await supabase.rpc('admin_verify_login', {
+        p_username: body.username,
+        p_password: body.password,
+      });
+      if (loginError) throw loginError;
+      if (loginOk !== true) {
         return json({ error: '账号或密码不正确' }, 401);
       }
       await supabase.from('admin_sessions').delete().lt('expires_at', new Date().toISOString());
